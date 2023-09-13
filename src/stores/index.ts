@@ -3,6 +3,6 @@ import {injectStores} from "@mobx-devtools/tools";
 
 const todoStore = new TodoStore();
 injectStores({
-    todoStore
+    todoStore,
 })
-export {todoStore}
+export {todoStore,}

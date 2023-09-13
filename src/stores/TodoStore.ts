@@ -1,24 +1,50 @@
-import {action, makeAutoObservable, makeObservable, observable} from "mobx";
+import { makeAutoObservable,} from "mobx";
+import {createTodo, deleteTodoById, getAllTodos, updateTodoById} from "../API/main.ts";
+import {Todo} from "../types.ts";
 
-interface Todo {
-    id: number,
-    value: string,
-    done: boolean
-}
+
 
 class TodoStore {
-    todos: Todo[] = [{id: 1, value: 'rarw', done: false}]
+    newValue: string=''
+   todos: Todo[] =getAllTodos()
 
-    addTodo(todo: Todo) {
-        this.todos.push(todo)
+    addTodo(value:string) {
+       const newTodo = createTodo(value)
+        this.todos.push(newTodo)
+    }
+
+    protected updateTodo(id: number, updatedTodo: Todo) {
+        const updated = updateTodoById(id, updatedTodo);
+        if (updated) {
+            const index = this.todos.findIndex((todo) => todo.id === id);
+            if (index !== -1) {
+                this.todos[index] = { ...this.todos[index], ...updatedTodo };
+            }
+        }
+    }
+
+    deleteTodo(id: number) {
+        const deleted = deleteTodoById(id);
+        if (deleted) {
+            this.todos = this.todos.filter((todo) => todo.id !== id);
+        }
     }
 
     toggleTodo(id: number) {
-        console.log(id, this.todos)
         const index = this.todos.findIndex(el => el.id === id)
-        console.log(index)
         this.todos[index].done = !this.todos[index].done
-        console.log(this.todos[index].done)
+        this.updateTodo(id, this.todos[index])
+    }
+    toggleChanging(id: number) {
+        const index = this.todos.findIndex(el => el.id === id)
+        this.todos[index].isChanging = !this.todos[index].isChanging
+        this.updateTodo(id, this.todos[index])
+    }
+
+    changeValue(id: number, value:string){
+        const index = this.todos.findIndex(el => el.id === id)
+        this.todos[index].value = value
+        this.updateTodo(id, this.todos[index])
     }
 
     constructor() {
