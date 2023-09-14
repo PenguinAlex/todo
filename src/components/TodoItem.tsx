@@ -1,5 +1,6 @@
 import React, {FC} from 'react';
 import {todoStore} from "../stores";
+import Input from "./input/Input.tsx";
 interface TodoProps{
     value: string,
     done: boolean,
@@ -16,12 +17,10 @@ const TodoItem:FC<TodoProps> = ({value, done, id, isChanging}) => {
             onBlur={()=>todoStore.toggleChanging(id)}>
                 {
                     isChanging
-                        ? <input
-                            autoFocus
-                            type='text'
-                            value={value}
-                            onChange={e =>todoStore.changeValue(id, e.target.value)}
-                        />
+                        ? <Input autoFocus
+                               type='text'
+                               value={value}
+                               onChange={e =>todoStore.changeValue(id, e.target.value)}/>
                         : <a onClick={() =>todoStore.toggleChanging(id)}>{value}</a>}
             </form>
 

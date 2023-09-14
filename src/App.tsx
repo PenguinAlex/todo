@@ -1,16 +1,26 @@
 import React, {FC} from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Todo from "./pages/Todo.tsx";
-import Done from "./pages/Done.tsx";
+import TodoStore from "./stores/TodoStore.ts";
 
 const App:FC = () => {
+    const router = createBrowserRouter([
+        {
+            element: <Todo/>,
+            path: '/',
+            loader: () =>{
+                return{todoStore: new TodoStore()}
+            }
+        },
+    ])
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path='/' element={<Todo/>}/>
-                <Route path='/edit' element={<Done/>}/>
-            </Routes>
-        </BrowserRouter>
+        <RouterProvider router={router} />
+        // <BrowserRouter>
+        //     <Routes>
+        //         <Route path='/' element={<Todo/>}/>
+        //         <Route path='/edit' element={<Done/>}/>
+        //     </Routes>
+        // </BrowserRouter>
     );
 };
 
