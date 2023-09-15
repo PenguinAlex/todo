@@ -2,6 +2,9 @@ import React, {FC} from 'react';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Todo from "./pages/Todo.tsx";
 import TodoStore from "./stores/TodoStore.ts";
+import Done from "./pages/Done.tsx";
+import Header from "./containers/Header/Header.tsx";
+import Edit from "./pages/Edit.tsx";
 
 const App:FC = () => {
     const router = createBrowserRouter([
@@ -12,15 +15,23 @@ const App:FC = () => {
                 return{todoStore: new TodoStore()}
             }
         },
+        {
+            element: <Done/>,
+            path:'/done'
+        },
+        {
+            element: <Edit/>,
+            path:'/edit/:taskId',
+            loader:({params}) =>{
+                return {
+                    todoStore: new TodoStore(),
+                    id: Number(params.taskId)
+                }
+            }
+        }
     ])
     return (
-        <RouterProvider router={router} />
-        // <BrowserRouter>
-        //     <Routes>
-        //         <Route path='/' element={<Todo/>}/>
-        //         <Route path='/edit' element={<Done/>}/>
-        //     </Routes>
-        // </BrowserRouter>
+            <RouterProvider router={router} />
     );
 };
 
