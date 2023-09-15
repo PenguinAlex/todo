@@ -5,8 +5,8 @@ import {observer} from "mobx-react-lite";
 import {useLoaderData} from "react-router-dom";
 import TodoStore from "../stores/TodoStore.ts";
 import {injectStores} from "@mobx-devtools/tools";
-import Input from "../components/input/Input.tsx";
-import Button from "../components/button/Button.tsx";
+
+import {Temporal} from "@js-temporal/polyfill";
 
 
 
@@ -19,36 +19,22 @@ const TodoList = observer(() => {
     console.log(todoStore)
     const styleTodoList = css`
       display: flex;
-      flex-flow: column;
-        align-items: center;
+      align-items: center;
+      flex-flow: wrap;
       justify-content: center;
     `
     return<div css={styleTodoList}>
-        <form onSubmit={e=>{
-            e.preventDefault()
-            todoStore.addTodo(todoStore!.newValue)
-            todoStore.newValue =''
-        }}>
-            <Input
-                type='text'
-                value={todoStore.newValue}
-                onChange={e=>todoStore.newValue = e.target.value}
-            />
-            <Button type='submit' value='Добавить'/>
-        </form>
-        <ul>
             {todoStore.todos.map(el =>
-                !el.done ?
-                    <TaskCard
-                        key={el.id}
-                        id={el.id}
-                        done={el.done}
-                        value={el.value}
-                        isChanging={el.isChanging}
-                    /> :
-                    null
-            )}
-        </ul>
+            !el.isCompleted ?
+                <TaskCard
+                    key={el.id}
+                    id={el.id}
+                    isCompleted={el.isCompleted}
+                    date={el.date}
+                    value={el.draft}
+                /> :
+                null
+        )}
     </div>
 
 });

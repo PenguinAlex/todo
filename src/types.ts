@@ -1,6 +1,8 @@
-export interface Todo {
+import {Temporal} from "@js-temporal/polyfill";
+
+export interface TypeTodo {
     id: number,
     value: string,
-    done: boolean,
-    isChanging: boolean
+    isCompleted: boolean,
+    date:Temporal.PlainDate|null
 }

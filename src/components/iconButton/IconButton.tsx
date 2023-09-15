@@ -3,15 +3,20 @@ import {css} from "@emotion/react";
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     icon: string
 }
-const styleIconButton = css`
+
+
+const IconButton:FC<IconButtonProps> = ({icon, ...props}) => {
+    const styleIconButton = css`
     background: none;
     border: none;
-  color: #FFDDD2;
+      margin-top: 10px;
 `
-const IconButton:FC<IconButtonProps> = ({icon, ...props}) => {
+    const styleIcon = css`
+    ba: #FFDDD2;
+`
     return (
         <button css={styleIconButton} {...props}>
-            <img  src={icon} alt='icon'/>
+            <img css={styleIcon}  src={icon} alt='icon'/>
         </button>
     );
 };

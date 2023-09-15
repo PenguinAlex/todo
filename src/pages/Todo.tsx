@@ -1,7 +1,11 @@
 import React, {FC} from 'react';
 import TodoList from "../containers/TodoList.tsx";
-import Header from "../containers/Header/Header.tsx";
 import {css} from "@emotion/react";
+import Input from "../components/input/Input.tsx";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
+import {createLogger} from "vite";
+import {Temporal} from "@js-temporal/polyfill";
 
 interface TodoProps{
 
@@ -13,7 +17,9 @@ const Todo:FC<TodoProps>= () => {
     `
     return (
         <div css={pageStyle}>
-            <Header/>
+            <Input type='date' onChange={e=>{
+                console.log(e.target.value)
+            }}/>
            <TodoList/>
         </div>
     );

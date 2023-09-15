@@ -1,13 +1,11 @@
-import React, {FC, useState} from 'react';
-import Input from "./input/Input.tsx";
-import {Todo} from "../types.ts";
+import React, {FC,} from 'react';
+import {TypeTodo} from "../types.ts";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import TodoStore from "../stores/TodoStore.ts";
-import Button from "./button/Button.tsx";
 import IconButton from "./iconButton/IconButton.tsx";
 import {css} from "@emotion/react";
 
-const TaskCard:FC<Todo> = ({value, done, id, isChanging}) => {
+const TaskCard:FC<TypeTodo> = ({value, isCompleted, id, date}) => {
     const {todoStore} = useLoaderData() as { todoStore:TodoStore}
     const navigate = useNavigate()
     const styleCard = css`
@@ -18,15 +16,27 @@ const TaskCard:FC<Todo> = ({value, done, id, isChanging}) => {
       border-radius: 7px;
       padding: 12px 16px;
       background: #006D77;
+      margin-top:16px ;
+      margin-right: 32px;
+      justify-content: space-between;
     `
     const styleButtonsBar = css`
       display: flex;
       flex-flow: column;
     `
+    const styleHeadline = css`
+        font-family: Inter,serif;
+        font-size: 15px;
+        margin-right: 16px;
+    `
     return (
         <div css={styleCard}>
             <div>
-                <h3>{value}</h3>
+                <h3 css={styleHeadline}>{value}</h3>
+                <>
+                    {date?date.toString():null}
+                    {isCompleted?<IconButton icon='src/assets/icons/completed.svg'/>: <IconButton icon='src/assets/icons/checkbox.svg'/>}
+                </>
             </div>
             <div css={styleButtonsBar}>
                 <IconButton
@@ -38,7 +48,6 @@ const TaskCard:FC<Todo> = ({value, done, id, isChanging}) => {
                     onClick={()=>todoStore.deleteTodo(id)}
                 />
             </div>
-
         </div>
     );
 };

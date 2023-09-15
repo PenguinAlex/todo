@@ -3,7 +3,6 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import Todo from "./pages/Todo.tsx";
 import TodoStore from "./stores/TodoStore.ts";
 import Done from "./pages/Done.tsx";
-import Header from "./containers/Header/Header.tsx";
 import Edit from "./pages/Edit.tsx";
 
 const App:FC = () => {
