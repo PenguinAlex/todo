@@ -1,36 +1,40 @@
 import React, {FC} from 'react';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import Todo from "./pages/Todo.tsx";
+import RunningTasks from "./pages/RunningTasks.tsx";
 import TodoStore from "./stores/TodoStore.ts";
-import Done from "./pages/Done.tsx";
+import CompletedTasks from "./pages/CompletedTasks.tsx";
 import Edit from "./pages/Edit.tsx";
 
 const App:FC = () => {
     const router = createBrowserRouter([
         {
-            element: <Todo/>,
+            element: <RunningTasks/>,
             path: '/',
             loader: () =>{
                 return{todoStore: new TodoStore()}
             }
         },
         {
-            element: <Done/>,
-            path:'/done'
+            element: <CompletedTasks/>,
+            path:'/completed',
+            loader: () =>{
+                return{todoStore: new TodoStore()}
+            }
         },
         {
             element: <Edit/>,
             path:'/edit/:taskId',
             loader:({params}) =>{
-                return {
-                    todoStore: new TodoStore(),
-                    id: Number(params.taskId)
-                }
+                const todoStore = new TodoStore()
+                const index = todoStore.todos.findIndex(t=> t.id === Number(params.taskId))
+                return {vm : todoStore.todos[index]}
             }
         }
     ])
     return (
+        <>
             <RouterProvider router={router} />
+        </>
     );
 };
 

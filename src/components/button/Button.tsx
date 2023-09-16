@@ -1,9 +1,11 @@
 import React, {ButtonHTMLAttributes, FC} from 'react';
 import {css} from "@emotion/react";
-interface InputProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-    value:string
+
+interface InputProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    value: string
 }
-const Button:FC<InputProps> = ({value, ...props}) => {
+
+const Button: FC<InputProps> = ({value, ...props}) => {
 
     const styleButton = css`
       border-radius: 6px;
@@ -12,6 +14,7 @@ const Button:FC<InputProps> = ({value, ...props}) => {
       color: #FFDDD2;
       height: 40px;
       width: 230px;
+      margin-top: 32px;
     `
 
     return (
