@@ -4,6 +4,7 @@ import RunningTasks from "./pages/RunningTasks.tsx";
 import TodoStore from "./stores/TodoStore.ts";
 import CompletedTasks from "./pages/CompletedTasks.tsx";
 import Edit from "./pages/Edit.tsx";
+import Create from "./pages/Create.tsx";
 
 const App:FC = () => {
     const router = createBrowserRouter([
@@ -17,6 +18,13 @@ const App:FC = () => {
         {
             element: <CompletedTasks/>,
             path:'/completed',
+            loader: () =>{
+                return{todoStore: new TodoStore()}
+            }
+        },
+        {
+            element: <Create/>,
+            path: '/create',
             loader: () =>{
                 return{todoStore: new TodoStore()}
             }

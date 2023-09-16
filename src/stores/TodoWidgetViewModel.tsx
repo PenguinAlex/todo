@@ -7,6 +7,9 @@ class TodoWidgetViewModel {
     constructor(public item: TypeTodo | null) {
         makeAutoObservable(this);
         if (item) {
+            if(this.id === -1){
+                this.id = Date.now()
+            }
             this.id = item.id
             this.draft = item.value
             this.isCompleted = item.isCompleted

@@ -28,6 +28,7 @@ const Header: FC<HeaderProps> = () => {
         <header css={styleHeader}>
             <Link css={styleLink} to='/'>Running Tasks</Link>
             <Link css={styleLink} to='/completed'>Completed Tasks</Link>
+            <Link css={styleLink} to='/create'>Create Task</Link>
         </header>
     );
 };
