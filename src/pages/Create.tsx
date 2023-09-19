@@ -42,7 +42,7 @@ const Create = observer(() => {
                 <Button
                     value='Create new task'
                     onClick={() => {
-                        todoStore.addTodo(vm.draft, vm.date);
+                        todoStore.addTask(vm.draft, vm.date);
                         navigate('/')
                     }}
                 />

@@ -1,76 +1,71 @@
-// Массив с начальными задачами
-import {TypeTodo} from "../types.ts";
 import {Temporal} from "@js-temporal/polyfill";
+import {TypeTask} from "../types.ts";
 
-const todos: TypeTodo[] = [
-    {id: 1, value: 'Завершить отчет по проекту', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {
-        id: 2,
-        value: 'Подготовить презентацию для совещания',
-        isCompleted: false,
-        date: Temporal.PlainDate.from('2023-12-12')
-    },
-    {
-        id: 3,
-        value: 'Сделать покупки в продуктовом магазине',
-        isCompleted: false,
-        date: Temporal.PlainDate.from('2023-12-12')
-    },
-    {
-        id: 4,
-        value: 'Записаться на тренировку в спортзал',
-        isCompleted: false,
-        date: Temporal.PlainDate.from('2023-12-12')
-    },
-    {id: 5, value: 'Прочитать главу из новой книги', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {id: 6, value: 'Подготовить ужин для гостей', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {id: 7, value: 'Провести собрание с командой', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {id: 8, value: 'Почистить квартиру', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {id: 9, value: 'Записать новую песню', isCompleted: false, date: Temporal.PlainDate.from('2023-12-12')},
-    {
-        id: 10,
-        value: 'Изучить новую программу на работе',
-        isCompleted: false,
-        date: Temporal.PlainDate.from('2023-12-12')
+
+class TaskAPI {
+    private storageKey = 'tasks';
+
+    private getTasksFromLocalStorage(): TypeTask[] {
+        const tasksString = localStorage.getItem(this.storageKey);
+        if (tasksString) {
+            console.log(JSON.parse(tasksString) as TypeTask[])
+            return JSON.parse(tasksString) as TypeTask[];
+        }
+        return [];
     }
 
-];
-
-// Функция для создания новой задачи
-function createTodo(value: string, date: Temporal.PlainDate | null): TypeTodo {
-    const id = Date.now()
-
-    const createdTodo: TypeTodo = {id: id, value: value, isCompleted: false, date: date};
-    todos.push(createdTodo);
-    return createdTodo;
-}
-
-// Функция для получения всех задач
-function getAllTodos(): TypeTodo[] {
-    return todos;
-}
-
-// Функция для обновления задачи по ID
-function updateTodoById(id: number, updatedTodo: TypeTodo): TypeTodo | null {
-    const index = todos.findIndex(t => t.id === id);
-    if (index === -1) {
-        return null; // Задача не найдена
+    private saveTasksToLocalStorage(tasks: TypeTask[]): void {
+        const tasksString = JSON.stringify(tasks);
+        localStorage.setItem(this.storageKey, tasksString);
     }
-    todos[index] = {...todos[index], ...updatedTodo};
 
-    return todos[index];
-
-}
-
-// Функция для удаления задачи по ID
-function deleteTodoById(id: number): boolean {
-    const index = todos.findIndex(t => t.id === id);
-    if (index === -1) {
-        return false; // Задача не найдена
+    // Получить список всех задач
+    getTasks(): Promise<TypeTask[]> {
+        return new Promise((resolve) => {
+            const tasks = this.getTasksFromLocalStorage();
+            resolve(tasks);
+        });
     }
-    todos.splice(index, 1);
 
-    return true;
+    // Создать новую задачу
+    createTask(value: string, date: Temporal.PlainDate|null): Promise<TypeTask> {
+        return new Promise((resolve) => {
+            const tasks = this.getTasksFromLocalStorage();
+            const id = tasks.length ? tasks[tasks.length - 1].id + 1 : 1;
+            const newTask: TypeTask = {id:id, value:value, date:date, isCompleted:false};
+            tasks.push(newTask);
+            this.saveTasksToLocalStorage(tasks);
+            resolve(newTask);
+        });
+    }
+
+    // Обновить задачу
+    updateTask(updatedTask: TypeTask): Promise<TypeTask|null> {
+        return new Promise((resolve) => {
+            const tasks = this.getTasksFromLocalStorage();
+            const index = tasks.findIndex((task) => task.id === updatedTask.id);
+            if (index !== -1) {
+                tasks[index] = updatedTask;
+                this.saveTasksToLocalStorage(tasks);
+                resolve(updatedTask);
+            }
+            resolve(null);
+        });
+    }
+
+    // Удалить задачу
+    deleteTask(id: number): Promise<boolean> {
+        return new Promise((resolve) => {
+            const tasks = this.getTasksFromLocalStorage();
+            const index = tasks.findIndex((task) => task.id === id);
+            if (index !== -1) {
+                tasks.splice(index, 1);
+                this.saveTasksToLocalStorage(tasks);
+                resolve(true);
+            }
+            resolve(false);
+        });
+    }
 }
 
-export {createTodo, updateTodoById, getAllTodos, deleteTodoById}
+export default TaskAPI;

@@ -18,7 +18,7 @@ const TodoList: FC<TodoListProps> = observer(({completed}) => {
     injectStores({
         todoStore
     })
-    console.log(todoStore)
+    console.log(todoStore.tasks)
     const styleTodoList = css`
       display: flex;
       align-items: center;
@@ -27,7 +27,7 @@ const TodoList: FC<TodoListProps> = observer(({completed}) => {
       max-width: 675px;
     `
     return <div css={styleTodoList}>
-        {todoStore.todos.map(el =>
+        {todoStore.tasks.map(el =>
             el.isCompleted === completed ?
                 <TaskCard
                     key={el.id}

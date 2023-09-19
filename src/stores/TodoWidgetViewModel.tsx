@@ -1,10 +1,10 @@
-import {TypeTodo} from "../types.ts";
+import {TypeTask} from "../types.ts";
 import {makeAutoObservable} from "mobx";
 import {Temporal} from "@js-temporal/polyfill";
-import {updateTodoById} from "../API/main.ts";
+import {api} from "./TodoStore.ts";
 
 class TodoWidgetViewModel {
-    constructor(public item: TypeTodo | null) {
+    constructor(public item: TypeTask | null) {
         makeAutoObservable(this);
         if (item) {
             if(this.id === -1){
@@ -24,25 +24,27 @@ class TodoWidgetViewModel {
     date: Temporal.PlainDate | null = null
     isCompleted: boolean = false
 
+     private async update(){
+       try{
+           await  api.updateTask( {date: this.date, id: this.id, isCompleted: this.isCompleted, value: this.draft})
+       } catch (err){
+           console.log(err, 'не удалось обновить таску :(')
+       }
+    }
     toggleCompleted() {
-        console.log(this.isCompleted)
         this.isCompleted = !this.isCompleted
-        console.log(this.isCompleted)
-
-        updateTodoById(this.id, {date: this.date, id: this.id, isCompleted: this.isCompleted, value: this.draft})
-        console.log(this.isCompleted)
+        this.update()
 
     }
 
     onDateChange(date: Temporal.PlainDate) {
         this.date = date
-        updateTodoById(this.id, {date: this.date, id: this.id, isCompleted: this.isCompleted, value: this.draft})
+        this.update()
     }
 
     onDraftChange(draft: string) {
         this.draft = draft
-        updateTodoById(this.id, {date: this.date, id: this.id, isCompleted: this.isCompleted, value: this.draft})
-
+        this.update()
     }
 
 }

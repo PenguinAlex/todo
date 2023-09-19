@@ -1,5 +1,5 @@
 import React, {FC,} from 'react';
-import {TypeTodo} from "../../types.ts";
+import {TypeTask} from "../../types.ts";
 import {useLoaderData, useNavigate} from "react-router-dom";
 import TodoStore from "../../stores/TodoStore.ts";
 import IconButton from "../../components/iconButton/IconButton.tsx";

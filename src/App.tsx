@@ -34,8 +34,8 @@ const App:FC = () => {
             path:'/edit/:taskId',
             loader:({params}) =>{
                 const todoStore = new TodoStore()
-                const index = todoStore.todos.findIndex(t=> t.id === Number(params.taskId))
-                return {vm : todoStore.todos[index]}
+                const index = todoStore.tasks.findIndex(t=> t.id === Number(params.taskId))
+                return {vm : todoStore.tasks[index]}
             }
         }
     ])

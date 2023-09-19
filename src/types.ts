@@ -1,6 +1,6 @@
 import {Temporal} from "@js-temporal/polyfill";
 
-export interface TypeTodo {
+export interface TypeTask {
     id: number,
     value: string,
     isCompleted: boolean,
